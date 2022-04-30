@@ -1,4 +1,12 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.Resource;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -11,9 +19,16 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-app.MapGet("/hello", (HttpContext httpContext) =>
+app.UseAuthentication();
+app.UseAuthorization();
+
+var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
+
+app.MapGet("/secure", (HttpContext httpContext) =>
 {
-    return "Hello World!";
-}).WithName("GetData");
+    httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+    return "Confidential data!";
+}).WithName("GetData")
+.RequireAuthorization();
 
 app.Run();
