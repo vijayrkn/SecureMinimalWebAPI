@@ -11,9 +11,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-app.MapGet("/data", (HttpContext httpContext) =>
+app.MapGet("/secure", (HttpContext httpContext) =>
 {
-    return $"Confidential data for {httpContext?.User?.Identity?.Name}";
+    return "Confidential data";
 }).WithName("GetSecureData");
 
 app.Run();
