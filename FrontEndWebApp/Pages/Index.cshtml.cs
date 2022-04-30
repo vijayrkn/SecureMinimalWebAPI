@@ -19,8 +19,8 @@ namespace FrontEndWebApp.Pages
 
         public async Task OnGet()
         {
-            using var response = await _downstreamWebApi.CallWebApiForUserAsync("DownstreamApi").ConfigureAwait(false);;
-if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            using var response = await _downstreamWebApi.CallWebApiForUserAsync("DownstreamApi").ConfigureAwait(false);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 ViewData["ApiResult"] = apiResult;
