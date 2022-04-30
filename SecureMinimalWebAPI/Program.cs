@@ -14,6 +14,6 @@ app.UseHttpsRedirection();
 app.MapGet("/hello", (HttpContext httpContext) =>
 {
     return "Hello World!";
-}).WithName("GetHello");
+}).WithName("GetData");
 
 app.Run();
